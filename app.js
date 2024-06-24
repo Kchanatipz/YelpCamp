@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const mongoose = require("mongoose");
 const meethodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
+const dotenv = require("dotenv");
 const Campground = require("./models/campground");
 
 const app = express();
@@ -10,9 +12,11 @@ const PORT = 4000;
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.engine("ejs", ejsMate);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(meethodOverride("_method"));
+dotenv.config({ path: "./config/config.env" });
 
 const connectDB = require("./db");
 const makeDB = require("./seed/index");

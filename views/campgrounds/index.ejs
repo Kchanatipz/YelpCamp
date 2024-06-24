@@ -1,25 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Campground</title>
-  </head>
-  <style>
-    a {
-      color: black;
-      text-decoration: none;
-    }
-  </style>
-  <body>
-    <h2>All campgrounds</h2>
-    <div>
-      <a href="/campgrounds/new">Add campgrounds</a>
+<% layout('layout/template') %>
+<h2>All campgrounds</h2>
+<div>
+  <a href="/campgrounds/new">Add campgrounds</a>
+</div>
+<% for( let camp of campgrounds ) { %>
+<div class="card mb-3">
+  <div class="row">
+    <div class="col-md-4">
+      <img src="<%= camp.image %>" class="img-fluid" alt="campground image" />
     </div>
-    <ul>
-      <% for( let c of campgrounds ) { %>
-      <li><a href="/campgrounds/<%= c._id %>"><%= c.title %></a></li>
-      <% } %>
-    </ul>
-  </body>
-</html>
+    <div class="col-mg-8">
+      <div class="card-body">
+        <h5 class="card-title"><%= camp.title %></h5>
+        <p class="card-text"><%= camp.description %></p>
+        <p class="card-text">
+          <small class="text-muted"><%= camp.location %></small>
+        </p>
+        <a href="/campgrounds/<%= camp._id %>" class="btn btn-primary"
+          >View <%= camp.title %></a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>
