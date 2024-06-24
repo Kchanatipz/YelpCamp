@@ -6,7 +6,7 @@ const meethodOverride = require("method-override");
 const Campground = require("./models/campground");
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
