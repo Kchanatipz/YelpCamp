@@ -1,46 +1,59 @@
-const mongoose = require("mongoose");
 const axios = require("axios");
 const Campground = require("../models/campground");
-
 const cities = require("./cities");
-const { places, descriptors } = require("./seedHelpers");
+const { places, descriptors, images } = require("./seedHelpers");
+
+// const sampleImg = async () => {
+//   try {
+//     const res = await axios.get("https://api.unsplash.com/photos/random", {
+//       params: {
+//         client_id: process.env.UNSPLASH_ACCESS_KEY,
+//         collections: 1114848,
+//         count: 30,
+//       },
+//     });
+//     return res.data.map((a) => a.urls.full);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+const frontURL = "https://images.unsplash.com/photo-";
+const backURL =
+  "?crop=entropy&cs=srgb&fm=jpg&ixid=M3w2MjU4OTl8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTkzMjYxNzN8&ixlib=rb-4.0.3&q=85";
 
 const sampleData = (array) => array[Math.floor(Math.random() * array.length)];
 
-const sampleImg = async function seedImg() {
-  try {
-    const resp = await axios.get("https://api.unsplash.com/photos/random", {
-      params: {
-        client_id: process.env.UNSPLASH_ACCESS_KEY,
-        collections: 1114848,
-      },
-    });
-    return resp.data.urls.small;
-  } catch (err) {
-    console.error(err);
-  }
+const sampleTitle = () => `${sampleData(descriptors)} ${sampleData(places)}`;
+
+const sampleLocation = () => {
+  const randIdx = Math.floor(Math.random() * 1000);
+  return `${cities[randIdx].city}, ${cities[randIdx].state}`;
 };
 
-const images = [];
+const sampleImage = () => `${frontURL}${sampleData(images)}${backURL}`;
 
-// for (let i = 0; i < 10; i++) {
-//   images.push(sampleImg());
-// }
+const sampleDescription = () => {
+  const text =
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam consequuntur voluptate, facere dolor molestiae nobis culpa tempore, harum eligendi expedita fuga maiores deserunt animi, recusandae quam aperiam. Dolores, aut repudiandae! Tempore alias, dicta vitae blanditiis eius enim cum maiores.";
+  const randLength = Math.floor(Math.random() * text.length) + 1;
+  return `${text.slice(0, randLength)}${randLength === 300 ? "" : "."}`;
+};
+
+const samplePrice = (maxValue) => Math.floor(Math.random() * maxValue) + 10;
 
 const makeDB = async () => {
   await Campground.deleteMany({});
-  for (let i = 0; i < 50; i++) {
-    const randIdx = Math.floor(Math.random() * 1000);
-    const randPrice = Math.floor(Math.random() * 20) + 10;
+
+  for (let i = 0; i < 40; i++) {
     const camp = new Campground({
-      title: `${sampleData(descriptors)} ${sampleData(places)}`,
-      location: `${cities[randIdx].city}, ${cities[randIdx].state}`,
-      // image: `${sampleData(images)}`,
-      image: "https://random.imagecdn.app/500/150",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam consequuntur voluptate, facere dolor molestiae nobis culpa tempore, harum eligendi expedita fuga maiores deserunt animi, recusandae quam aperiam. Dolores, aut repudiandae! Tempore alias, dicta vitae blanditiis eius enim cum maiores.",
-      price: randPrice,
+      title: sampleTitle(),
+      location: sampleLocation(),
+      image: sampleImage(),
+      description: sampleDescription(),
+      price: samplePrice(20),
     });
+
     await camp.save();
   }
 };
