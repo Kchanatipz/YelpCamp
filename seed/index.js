@@ -35,7 +35,7 @@ const sampleImage = () => `${frontURL}${sampleData(images)}${backURL}`;
 
 const sampleDescription = () => {
   const text =
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam consequuntur voluptate, facere dolor molestiae nobis culpa tempore, harum eligendi expedita fuga maiores deserunt animi, recusandae quam aperiam. Dolores, aut repudiandae! Tempore alias, dicta vitae blanditiis eius enim cum maiores.";
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam consequuntur voluptate, facere dolor molestiae nobis culpa tempore, harum eligendi expedita fuga maiores deserunt animi, recusandae quam aperiam.";
   const randLength = Math.floor(Math.random() * text.length) + 1;
   return `${text.slice(0, randLength)}${randLength === 300 ? "" : "."}`;
 };
