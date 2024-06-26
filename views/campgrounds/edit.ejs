@@ -4,14 +4,14 @@
   <div class="col-6 offset-3">
     <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
       <div class="mb-3">
-        <label class="form-label" for="title">Title</label>
+        <label class="form-label" for="name">Name</label>
         <input
           class="form-control"
           type=" text"
-          id="title"
-          name="campground[title]"
+          id="name"
+          name="campground[name]"
           required
-          value="<%= campground.title %>"
+          value="<%= campground.name %>"
         />
       </div>
       <div class="mb-3">

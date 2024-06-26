@@ -24,7 +24,7 @@ const backURL =
 
 const sampleData = (array) => array[Math.floor(Math.random() * array.length)];
 
-const sampleTitle = () => `${sampleData(descriptors)} ${sampleData(places)}`;
+const sampleName = () => `${sampleData(descriptors)} ${sampleData(places)}`;
 
 const sampleLocation = () => {
   const randIdx = Math.floor(Math.random() * 1000);
@@ -47,7 +47,7 @@ const makeDB = async () => {
 
   for (let i = 0; i < 40; i++) {
     const camp = new Campground({
-      title: sampleTitle(),
+      name: sampleName(),
       location: sampleLocation(),
       image: sampleImage(),
       description: sampleDescription(),
