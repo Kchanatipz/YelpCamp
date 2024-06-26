@@ -72,7 +72,6 @@ app.put("/campgrounds/:id", async (req, res) => {
     id,
     req.body.campground
   );
-  console.log(campground);
   res.redirect(`/campgrounds/${campground._id}`);
 });
 
