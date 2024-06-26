@@ -1,7 +1,7 @@
 const axios = require("axios");
 const Campground = require("../models/campground");
 const cities = require("./cities");
-const { places, descriptors, images } = require("./seedHelpers");
+const { places, descriptors, images } = require("./sampleData");
 
 // const sampleImg = async () => {
 //   try {
