@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const connectDB = () => {
   try {
     mongoose
-      .connect("mongodb://127.0.0.1/yelp-camp")
+      .connect("mongodb://127.0.0.1/yelpCamp")
       .then(() => {
         console.log("Mongo connected");
       })
