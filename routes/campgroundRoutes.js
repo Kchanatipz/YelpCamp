@@ -1,9 +1,11 @@
 const express = require("express");
 
 const Campground = require("../models/campgroundModel");
-const catchAsync = require("../utils/catchAsync");
-const { validateCampgroundSchema } = require("../utils/validateSchema");
-const { isLoggedIn } = require("../utils/isLoggedin");
+const {
+  catchAsync,
+  validateCampgroundSchema,
+  isLoggedIn,
+} = require("../utils/middlewares");
 
 const router = express.Router();
 

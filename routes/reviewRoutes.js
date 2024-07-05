@@ -2,8 +2,7 @@ const express = require("express");
 
 const Campground = require("../models/campgroundModel");
 const Review = require("../models/reviewModel");
-const catchAsync = require("../utils/catchAsync");
-const { validateReviewSchema } = require("../utils/validateSchema");
+const { catchAsync, validateReviewSchema } = require("../utils/middlewares");
 
 // express router get seperate params from the parent route
 // mergeParams: true will merge the params
