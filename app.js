@@ -4,10 +4,14 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const passportLocal = require("passport-local");
 
 const ExpressError = require("./utils/ExpressError");
-const campgroundRoutes = require("./routes/campgrounds");
-const reviewRoutes = require("./routes/reviews");
+const campgroundRoutes = require("./routes/campgroundRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
+const userRoutes = require("./routes/userRoutes");
+const User = require("./models/userModel");
 
 const app = express();
 
@@ -34,19 +38,31 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(passport.initialize());
+// to use persistent login session
+app.use(passport.session());
+// authenticate user
+passport.use(new passportLocal(User.authenticate()));
+// how to store & retrieve information(user) in session
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 const connectDB = require("./db");
 const makeDB = require("./seed/index");
 connectDB();
 makeDB();
 
-// middleware to catch flash
+// store local data which can be
+// access by templates or other middlewares
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.currentUser = req.user;
   next();
 });
 
+// routes
+app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:campId/reviews", reviewRoutes);
 
