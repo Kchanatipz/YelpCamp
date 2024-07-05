@@ -1,6 +1,6 @@
 const axios = require("axios");
-const Campground = require("../models/campground");
-const Review = require("../models/review");
+const Campground = require("../models/campgroundModel");
+const Review = require("../models/reviewModel");
 const cities = require("./cities");
 const { places, descriptors, images } = require("./sampleData");
 

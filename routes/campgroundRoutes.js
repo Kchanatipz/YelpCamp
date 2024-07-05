@@ -1,6 +1,6 @@
 const express = require("express");
 
-const Campground = require("../models/campground");
+const Campground = require("../models/campgroundModel");
 const catchAsync = require("../utils/catchAsync");
 const { validateCampgroundSchema } = require("../utils/validateSchema");
 
