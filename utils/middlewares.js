@@ -1,3 +1,5 @@
+const Campground = require("../models/campgroundModel");
+const Review = require("../models/reviewModel");
 const ExpressError = require("./ExpressError");
 const {
   JoiCampgroundSchema,
@@ -48,6 +50,30 @@ module.exports.isLoggedIn = (req, res, next) => {
 module.exports.storeReturnTo = async (req, res, next) => {
   if (req.session.returnTo) {
     res.locals.returnTo = req.session.returnTo;
+  }
+  next();
+};
+
+// desc     protect unauthorize user (not owner)
+//          from updating and deleting campground
+module.exports.authorizeCampground = async (req, res, next) => {
+  const { id } = req.params;
+  const campground = await Campground.findById(id);
+  if (!campground.owner.equals(req.user._id)) {
+    req.flash("error", "You don't have permission to do that");
+    return res.redirect(`/campgrounds/${id}`);
+  }
+  next();
+};
+
+// desc     protect not-author user to from deleting review
+module.exports.authorizeReview = async (req, res, next) => {
+  const { campId, reviewId } = req.params;
+  const review = await Review.findById(reviewId);
+  console.log(review);
+  if (!review.author.equals(req.user._id)) {
+    req.flash("error", "You don't have permission to do that");
+    return res.redirect(`/campgrounds/${campId}`);
   }
   next();
 };

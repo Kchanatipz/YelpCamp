@@ -305,3 +305,13 @@ module.exports.images = [
   "1485529910432-783b455774fa",
   "1500921453272-f9ae405da3a5",
 ];
+
+module.exports.owners = [
+  "6687f9e634c7795ca1af5afe", // me
+  "6687f9f634c7795ca1af5b05", // ma
+  "6687fad20534d644fdf8104d", // mu
+  "6687fb050534d644fdf81054", // nu
+  "6687fa0c34c7795ca1af5b0c", // user1
+  "6687fa2e34c7795ca1af5b17", // user2
+  "6687fac70534d644fdf81046", // user3
+];

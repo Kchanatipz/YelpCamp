@@ -57,6 +57,8 @@ makeDB();
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  // from passport middleware
+  // req.user is the user that is authenticated
   res.locals.currentUser = req.user;
   next();
 });

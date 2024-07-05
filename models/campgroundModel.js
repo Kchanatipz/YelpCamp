@@ -14,6 +14,10 @@ const CampgroundSchema = new Schema({
       ref: "Review",
     },
   ],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 CampgroundSchema.post("findOneAndDelete", async (doc) => {

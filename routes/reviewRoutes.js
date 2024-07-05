@@ -2,7 +2,12 @@ const express = require("express");
 
 const Campground = require("../models/campgroundModel");
 const Review = require("../models/reviewModel");
-const { catchAsync, validateReviewSchema } = require("../utils/middlewares");
+const {
+  catchAsync,
+  validateReviewSchema,
+  isLoggedIn,
+  authorizeReview,
+} = require("../utils/middlewares");
 
 // express router get seperate params from the parent route
 // mergeParams: true will merge the params
@@ -13,12 +18,14 @@ const router = express.Router({ mergeParams: true });
 // route    POST /campgrounds/:id/reviews
 router.post(
   "/",
+  isLoggedIn,
   validateReviewSchema,
   catchAsync(async (req, res) => {
     const { campId } = req.params;
     const campground = await Campground.findById(campId);
     const review = new Review(req.body.review);
     campground.reviews.push(review);
+    review.author = req.user._id;
     await review.save();
     await campground.save();
     req.flash("success", "Created new review!");
@@ -30,6 +37,8 @@ router.post(
 // route    DELETE /campgrounds/:campId/reviews/reviewId
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  authorizeReview,
   catchAsync(async (req, res) => {
     const { campId, reviewId } = req.params;
     await Campground.findByIdAndUpdate(campId, {

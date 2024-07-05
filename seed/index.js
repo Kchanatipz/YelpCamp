@@ -2,7 +2,7 @@ const axios = require("axios");
 const Campground = require("../models/campgroundModel");
 const Review = require("../models/reviewModel");
 const cities = require("./cities");
-const { places, descriptors, images } = require("./sampleData");
+const { places, descriptors, images, owners } = require("./sampleData");
 
 // const sampleImg = async () => {
 //   try {
@@ -43,17 +43,20 @@ const sampleDescription = () => {
 
 const samplePrice = (maxValue) => Math.floor(Math.random() * maxValue) + 10;
 
+const sampleOwner = () => sampleData(owners);
+
 const makeDB = async () => {
   await Campground.deleteMany({});
   await Review.deleteMany({});
 
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 30; i++) {
     const camp = new Campground({
       name: sampleName(),
       location: sampleLocation(),
       image: sampleImage(),
       description: sampleDescription(),
       price: samplePrice(20),
+      owner: sampleOwner(),
     });
 
     await camp.save();
