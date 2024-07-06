@@ -70,7 +70,6 @@ module.exports.authorizeCampground = async (req, res, next) => {
 module.exports.authorizeReview = async (req, res, next) => {
   const { campId, reviewId } = req.params;
   const review = await Review.findById(reviewId);
-  console.log(review);
   if (!review.author.equals(req.user._id)) {
     req.flash("error", "You don't have permission to do that");
     return res.redirect(`/campgrounds/${campId}`);
