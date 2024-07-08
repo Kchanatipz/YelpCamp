@@ -6,6 +6,9 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const passportLocal = require("passport-local");
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const ExpressError = require("./utils/ExpressError");
 const campgroundRoutes = require("./routes/campgroundRoutes");

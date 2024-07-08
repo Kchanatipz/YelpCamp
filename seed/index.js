@@ -1,8 +1,14 @@
-const axios = require("axios");
+// const axios = require("axios");
 const Campground = require("../models/campgroundModel");
 const Review = require("../models/reviewModel");
 const cities = require("./cities");
-const { places, descriptors, images, owners } = require("./sampleData");
+const {
+  places,
+  descriptors,
+  images,
+  images2,
+  owners,
+} = require("./sampleData");
 
 // const sampleImg = async () => {
 //   try {
@@ -22,6 +28,7 @@ const { places, descriptors, images, owners } = require("./sampleData");
 const frontURL = "https://images.unsplash.com/photo-";
 const backURL =
   "?crop=entropy&cs=srgb&fm=jpg&ixid=M3w2MjU4OTl8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTkzMjYxNzN8&ixlib=rb-4.0.3&q=85";
+const baseURL = "https://res.cloudinary.com/dbi2rnjhe/image/upload/";
 
 const sampleData = (array) => array[Math.floor(Math.random() * array.length)];
 
@@ -33,10 +40,11 @@ const sampleLocation = () => {
 };
 
 const sampleImage = () => `${frontURL}${sampleData(images)}${backURL}`;
+const sampleImage2 = () => `${baseURL}${sampleData(images2)}`;
 
 const sampleDescription = () => {
   const text =
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam consequuntur voluptate, facere dolor molestiae nobis culpa tempore, harum eligendi expedita fuga maiores deserunt animi, recusandae quam aperiam.";
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam consequuntur voluptate, facere dolor molestiae nobis culpa tempore";
   const randLength = Math.floor(Math.random() * text.length) + 1;
   return `${text.slice(0, randLength)}${randLength === 300 ? "" : "."}`;
 };
@@ -49,11 +57,17 @@ const makeDB = async () => {
   await Campground.deleteMany({});
   await Review.deleteMany({});
 
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 50; i++) {
     const camp = new Campground({
       name: sampleName(),
       location: sampleLocation(),
-      image: sampleImage(),
+      // image: sampleImage(),
+      images: [
+        {
+          url: sampleImage2(),
+          filename: "",
+        },
+      ],
       description: sampleDescription(),
       price: samplePrice(20),
       owner: sampleOwner(),

@@ -1,8 +1,12 @@
 <% layout('layout/template') %>
-<div class="row">
+<div class="row mb-3">
   <h1 class="text-center">Edit Campground</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST">
+    <form
+      action="/campgrounds/<%= campground._id %>?_method=PUT"
+      method="POST"
+      enctype="multipart/form-data"
+    >
       <div class="mb-3">
         <label class="form-label" for="name">Name</label>
         <input
@@ -26,18 +30,25 @@
         />
       </div>
       <div class="mb-3">
-        <label class="form-label" for="image">Image Url</label>
-        <input
-          class="form-control"
-          type="text"
-          id="location"
-          name="campground[image]"
-          required
-          value="<%= campground.image %>"
-        />
+        <label class="form-label">Upload image</label>
+        <div class="form-file custom-file">
+          <input
+            type="file"
+            class="form-file-input"
+            id="image"
+            name="image"
+            multiple
+          />
+          <label class="form-file-label" for="image">
+            <span class="form-file-text custom-file-label"
+              >Choose image(s)...</span
+            >
+            <span class="form-file-button">Browse</span>
+          </label>
+        </div>
       </div>
       <div class="mb-3">
-        <label class="form-label" for="price">Campground Price</label>
+        <label class="form-label" for="price">Price</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">$</span>
           <input
@@ -67,9 +78,30 @@
         </textarea>
       </div>
       <div class="mb-3">
+        <% campground.images.forEach((image,i) => { %>
+        <img src="<%= image.thumbnail %>" alt="" class="img-thumbnail" />
+        <div class="form-check-inline">
+          <input
+            type="checkbox"
+            id="image-<%= i %>"
+            name="deleteImages[]"
+            value="<%= image.filename %>"
+          />
+          <label for="image-<%= i %>">Delete?</label>
+        </div>
+        <% }) %>
+      </div>
+      <div class="mb-3">
         <button class="btn btn-success">Update campground</button>
       </div>
     </form>
-    <a href="/campgrounds">Cancel</a>
+    <a
+      href="/campgrounds/<%= campground._id %>"
+      class="btn btn-danger"
+      tabindex="-1"
+      role="button"
+      aria-disabled="true"
+      >Cancel</a
+    >
   </div>
 </div>
