@@ -1,5 +1,5 @@
 <% for( let review of campground.reviews ) { %>
-<div class="mb-3 card">
+<div class="card mt-2">
   <div class="card-body">
     <h5 class="card-title"><%= review.author.username%></h5>
     <p class="starability-result" data-rating="<%=review.rating%>">
