@@ -1,5 +1,11 @@
+const mapBoxGeoCoding = require("@mapbox/mapbox-sdk/services/geocoding");
+
 const Campground = require("../models/campgroundModel");
 const { cloudinary } = require("../cloudinary/index");
+
+// initialize map box instance
+// GeoCoder have 2 methods : forward an reverse geocode
+const GeoCoder = mapBoxGeoCoding({ accessToken: process.env.MAPBOX_TOKEN });
 
 // desc     show all campgrounds
 // route    GET /campgrounds
@@ -36,12 +42,17 @@ module.exports.showCampground = async (req, res) => {
 // desc     create new campground
 // route    POST /campgrounds
 module.exports.createCampground = async (req, res) => {
+  const geoData = await GeoCoder.forwardGeocode({
+    query: req.body.campground.location,
+    limit: 1,
+  }).send();
   const campground = new Campground(req.body.campground);
   campground.images = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,
   }));
   campground.owner = req.user._id;
+  campground.geometry = geoData.body.features[0].geometry;
   await campground.save();
   req.flash("success", "Successfully made a new campground");
   res.redirect(`/campgrounds/${campground._id}`);

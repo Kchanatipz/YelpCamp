@@ -26,7 +26,7 @@ router
   .get(catchAsync(showAllCampgrounds))
   .post(
     isLoggedIn,
-    upload.array("images"),
+    upload.array("image"),
     validateCampgroundSchema,
     catchAsync(createCampground)
   );

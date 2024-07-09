@@ -71,6 +71,7 @@ const makeDB = async () => {
       description: sampleDescription(),
       price: samplePrice(20),
       owner: sampleOwner(),
+      geometry: { type: "Point", coordinates: [-85.66039, 30.15522] },
     });
 
     await camp.save();

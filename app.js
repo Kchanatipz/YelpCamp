@@ -53,7 +53,7 @@ passport.deserializeUser(User.deserializeUser());
 const connectDB = require("./db");
 const makeDB = require("./seed/index");
 connectDB();
-makeDB();
+// makeDB();
 
 // store local data which can be
 // access by templates or other middlewares
