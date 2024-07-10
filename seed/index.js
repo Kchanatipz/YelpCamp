@@ -44,7 +44,7 @@ const makeDB = async () => {
   await Campground.deleteMany({});
   await Review.deleteMany({});
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 200; i++) {
     const city = sampleCities();
 
     const camp = new Campground({

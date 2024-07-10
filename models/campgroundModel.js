@@ -11,35 +11,42 @@ ImageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
-const CampgroundSchema = new Schema({
-  name: String,
-  price: Number,
-  description: String,
-  location: String,
-  images: [ImageSchema],
-  reviews: [
-    {
+// by default mongoose doesn't include virtuals
+// when converted to JSON format
+const opts = { toJSON: { virtuals: true } };
+
+const CampgroundSchema = new Schema(
+  {
+    name: String,
+    price: Number,
+    description: String,
+    location: String,
+    images: [ImageSchema],
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+    owner: {
       type: Schema.Types.ObjectId,
-      ref: "Review",
+      ref: "User",
     },
-  ],
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  geometry: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      required: true,
-    },
-    // [longitude, latitude]
-    coordinates: {
-      type: [Number],
-      required: true,
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      // [longitude, latitude]
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
   },
-});
+  opts
+);
 
 CampgroundSchema.post("findOneAndDelete", async (doc) => {
   if (doc) {
@@ -49,6 +56,14 @@ CampgroundSchema.post("findOneAndDelete", async (doc) => {
       },
     });
   }
+});
+
+// to make a popUp for cluster map
+// (GeoJSON only accepts properties as an object)
+CampgroundSchema.virtual("properties.popUp").get(function () {
+  return `
+  <strong><a href="/campgrounds/${this._id}">${this.name}</a><strong>
+  <p>${this.description.substring(0, 20)}...</p>`;
 });
 
 const Campground = mongoose.model("Campground", CampgroundSchema);
