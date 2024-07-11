@@ -6,6 +6,9 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const passportLocal = require("passport-local");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
@@ -15,6 +18,7 @@ const campgroundRoutes = require("./routes/campgroundRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const userRoutes = require("./routes/userRoutes");
 const User = require("./models/userModel");
+const { helmetConfig } = require("./utils/helmetConfig");
 
 const app = express();
 
@@ -30,6 +34,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const sessionConfig = {
+  name: "session",
   secret: "NotQuiteASecret",
   resave: false,
   saveUninitialized: true,
@@ -37,6 +42,7 @@ const sessionConfig = {
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
+    // secure: true
   },
 };
 app.use(session(sessionConfig));
@@ -49,6 +55,11 @@ passport.use(new passportLocal(User.authenticate()));
 // how to store & retrieve information(user) in session
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// for mongo injection
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy(helmetConfig));
 
 const connectDB = require("./db");
 const makeDB = require("./seed/index");
