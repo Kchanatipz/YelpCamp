@@ -19,10 +19,13 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const userRoutes = require("./routes/userRoutes");
 const User = require("./models/userModel");
 const { helmetConfig } = require("./utils/helmetConfig");
+const MongoDBStore = require("connect-mongo");
 
 const app = express();
 
-const PORT = 4000;
+const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1/yelpCamp";
+const secret = process.env.SECRET || "NotQuiteASecret";
+const port = process.env.PORT || 3000;
 
 // config
 app.set("view engine", "ejs");
@@ -33,9 +36,22 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+const store = MongoDBStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    // secret: Secret,
+    secret,
+  },
+});
+
+store.on("error", (e) => {
+  console.log("Session store error", e);
+});
+
 const sessionConfig = {
   name: "session",
-  secret: "NotQuiteASecret",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -44,6 +60,7 @@ const sessionConfig = {
     httpOnly: true,
     // secure: true
   },
+  store,
 };
 app.use(session(sessionConfig));
 app.use(flash());
@@ -63,7 +80,7 @@ app.use(helmet.contentSecurityPolicy(helmetConfig));
 
 const connectDB = require("./db");
 const makeDB = require("./seed/index");
-connectDB();
+connectDB(dbUrl);
 // makeDB();
 
 // store local data which can be
@@ -98,6 +115,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error", { err });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

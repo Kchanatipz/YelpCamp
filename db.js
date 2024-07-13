@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const connectDB = () => {
+const connectDB = (url) => {
   try {
     mongoose
-      .connect("mongodb://127.0.0.1/yelpCamp")
+      .connect(url)
       .then(() => {
         console.log("Mongo connected");
       })
