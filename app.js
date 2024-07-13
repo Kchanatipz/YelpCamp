@@ -25,7 +25,7 @@ const app = express();
 
 const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1/yelpCamp";
 const secret = process.env.SECRET || "NotQuiteASecret";
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 // config
 app.set("view engine", "ejs");
