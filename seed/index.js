@@ -40,11 +40,15 @@ const samplePrice = (maxValue) => Math.floor(Math.random() * maxValue) + 10;
 
 const sampleOwner = () => sampleData(owners);
 
-const makeDB = async () => {
+const clearDB = async () => {
   await Campground.deleteMany({});
   await Review.deleteMany({});
+};
 
-  for (let i = 0; i < 200; i++) {
+module.exports.makeDB = async () => {
+  clearDB();
+
+  for (let i = 0; i < 300; i++) {
     const city = sampleCities();
 
     const camp = new Campground({
@@ -68,5 +72,3 @@ const makeDB = async () => {
     await camp.save();
   }
 };
-
-module.exports = makeDB;
